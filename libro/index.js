@@ -63,16 +63,35 @@ for (let i = 0; i < libros.length; i++) {
 console.log(librosAutores)
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
+    // tomamos los géneros únicos
+    let generos = []
+    libros.forEach(libro => {
+        let genero = libro.genero.toLowerCase();
+        if (!generos.includes(genero)) {
+            generos.push(genero);
+        }
+    });
+
     // Construimos todo el HTML directamente
     document.getElementById("mostrar").innerHTML = `
     <h2>Lista de Libros</h2>
+
+    <!-- Filtrar por género -->
+        <b>Filtrar por género:</b><br>
+        ${generos.map(genero => `
+            <label><input type="radio" name="genero" value="${genero}"> ${genero}</label>
+        `).join('')}
+
+    <br>
+    <!--ordenar segun la opcion-->
     <label for="ordenar">Ordenar por: </label>
     <select id="ordenar" onchange="ordenarLibros(this.value)">
       <option value="titulo">Título</option>
       <option value="genero">Género</option>
       <option value="fechaPublicacion">Fecha de publicación</option>
     </select>
+<!--mostrar los libros seleccionados-->
     <table border="1" id="tabla">
       <tr>
         <th>Título</th>
@@ -88,40 +107,52 @@ document.addEventListener("DOMContentLoaded", function() {
       `).join('')}
     </table>
   `;
+
+    // Agregar evento al grupo de radio buttons
+    document.querySelectorAll('input[name="genero"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            filtrarPorGenero(e.target.value);
+        });
+    });
 });
+
+// Función para filtrar libros por género
+function filtrarPorGenero(genero) {
+    if (genero === "todos") {
+        actualizarTabla(libros);
+    } else {
+        const filtrados = libros.filter(libro => libro.genero.toLowerCase() === genero.toLowerCase());
+        actualizarTabla(filtrados);
+    }
+}
 
 // Función global para ordenar libros
 function ordenarLibros(criterio) {
-    const tabla = document.getElementById("tabla");
     let librosOrdenados = libros.slice(); // copiar array
 
     if (criterio === "titulo") {
-        // ordenar alfabéticamente (de la A a la Z)
-        librosOrdenados.sort(function(a, b) {
-            return a.titulo.localeCompare(b.titulo);
-        });
+        librosOrdenados.sort((a, b) => a.titulo.localeCompare(b.titulo));
     }
     if (criterio === "fechaPublicacion") {
-        // ordenar por año (de más antiguo a más nuevo)
-        librosOrdenados.sort(function(a, b) {
-            return a.fechaPublicacion - b.fechaPublicacion;
-        });
+        librosOrdenados.sort((a, b) => a.fechaPublicacion - b.fechaPublicacion);
     }
     if (criterio === "genero") {
-        // ordenar por género (de la A a la Z)
-        librosOrdenados.sort(function (a, b) {
-            return a.genero.localeCompare(b.genero);
-        });
+        librosOrdenados.sort((a, b) => a.genero.localeCompare(b.genero));
     }
 
-    // Reconstruir filas de la tabla
+    actualizarTabla(librosOrdenados);
+}
+
+// Función para reconstruir tabla según una lista
+function actualizarTabla(lista) {
+    const tabla = document.getElementById("tabla");
     tabla.innerHTML = `
     <tr>
       <th>Título</th>
       <th>Género</th>
       <th>Fecha de publicación</th>
     </tr>
-    ${librosOrdenados.map(libro => `
+    ${lista.map(libro => `
       <tr>
         <td>${libro.titulo}</td>
         <td>${libro.genero}</td>
@@ -130,7 +161,3 @@ function ordenarLibros(criterio) {
     `).join('')}
   `;
 }
-
-
-
-
