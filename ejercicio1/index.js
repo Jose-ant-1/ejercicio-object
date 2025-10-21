@@ -12,9 +12,9 @@ const salaries = {
 
 document.addEventListener('DOMContentLoaded', () => {
     const mostrar= document.getElementById('mostrar');
-    mostrar.innerHTML = `La suma de todos los salario es: ${sumaSalario()}`
-    mostrar.innerHTML += `Los nombres ordenados alfabeticamente con su salario son: `
-})
+    mostrar.innerHTML = `La suma de todos los salario es: ${sumaSalario()}`;
+    mostrar.innerHTML += `\n\nLos nombres ordenados alfabeticamente con su salario son:`
+});
 
 function sumaSalario() {
 let sumaSalarios = 0;
