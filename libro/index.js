@@ -6,19 +6,19 @@ const libros = [{
     "autor": ["Dan Brown"],
     "paginas": 400,
     "fechaPublicacion": 2003
-},{
+    },{
     "titulo": "Los Pilares de la Tierra",
     "genero": "misterio",
     "autor": ["Ken Follet"],
     "paginas": 800,
     "fechaPublicacion": 1989
-},{
+    },{
     "titulo": "Un mundo sin fin",
     "genero": "historico",
     "autor": ["Ken Follet"],
     "paginas": 1200,
     "fechaPublicacion": 2007
-},{
+    },{
     "titulo": "El cabo de NuncaMuertos",
     "genero": "Terror",
     "autor": ["Adan Fidgeral", "Carolina Diaz"],
@@ -61,7 +61,6 @@ for (let i = 0; i < libros.length; i++) {
     }
 }
 console.log(librosAutores)
-
 
 document.addEventListener("DOMContentLoaded", () => {
     // tomamos los géneros únicos
@@ -107,6 +106,8 @@ document.addEventListener("DOMContentLoaded", () => {
       `).join('')}
     </table>
   `;
+
+
 
     // Agregar evento al grupo de radio buttons
     document.querySelectorAll('input[name="genero"]').forEach(radio => {

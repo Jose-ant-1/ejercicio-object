@@ -1,6 +1,6 @@
 console.log('Happy developing ✨')
 
-const person = [{
+const personas = [{
     "nombre":"Noon",
     "edad":6,
     "aficiones":["Deporte","Lectura","Viajar", "juegos"],
@@ -15,23 +15,22 @@ const person = [{
 
 document.addEventListener('DOMContentLoaded', () => {
     const mostrar = document.getElementById('mostrar');
-    person.forEach((person) => {
+    personas.forEach((person) => {
         generarFormulario(person)
     })
-
 
     function generarFormulario(objeto) {
         mostrar.innerHTML += `    <form>
         <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" value="${Object.values(objeto)[0]}"> <br>
+        <input type="text" id="nombre" value="${objeto.nombre}"> <br>
 
         <label for="edad">Edad:</label>
-        <input type="number" id="edad" value="${Object.values(objeto)[1]}"> <br>
+        <input type="number" id="edad" value="${objeto.edad}"> <br>
 
         <label for="aficiones">Aficiones:</label>
         ${mostrarAficiones(objeto.aficiones)}<br>
         <label for="emancipado">Emancipado</label>
-        <input id="emancipado" type="checkbox" ${Object.values(objeto)[3] ? "checked" : ""}><br>
+        <input id="emancipado" type="checkbox" ${objeto.emancipado ? "checked" : ""}><br>
         <button type="submit">Enviar</button>
     </form> </br>`
     }

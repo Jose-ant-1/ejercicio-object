@@ -25,4 +25,3 @@ for (let i = 0; i < salarios.length; i++) {
     console.log("se sumaron los salarios, salió: " + sumaSalarios);
 return sumaSalarios;
 }
-
