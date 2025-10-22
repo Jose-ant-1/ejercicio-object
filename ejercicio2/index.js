@@ -19,7 +19,6 @@ const tiposVariable = {
     "boolean": "checkbox"
 };
 
-
 document.addEventListener('DOMContentLoaded', () => {
     const mostrar = document.getElementById('mostrar');
     person.forEach((person) => {
