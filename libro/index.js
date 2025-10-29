@@ -1,24 +1,27 @@
 console.log('Happy developing ✨')
 
-const libros = [{
+const libros = [
+    {
     "titulo": "El Código Da Vinci",
     "genero": "suspense",
     "autor": ["Dan Brown"],
     "paginas": 400,
-    "fechaPublicacion": 2003
-    },{
+    "fechaPublicacion": 2003},
+    {
     "titulo": "Los Pilares de la Tierra",
     "genero": "misterio",
     "autor": ["Ken Follet"],
     "paginas": 800,
     "fechaPublicacion": 1989
-    },{
+    },
+    {
     "titulo": "Un mundo sin fin",
     "genero": "historico",
     "autor": ["Ken Follet"],
     "paginas": 1200,
     "fechaPublicacion": 2007
-    },{
+    },
+    {
     "titulo": "El cabo de NuncaMuertos",
     "genero": "Terror",
     "autor": ["Adan Fidgeral", "Carolina Diaz"],
@@ -27,9 +30,15 @@ const libros = [{
 }];
 
 // mostrar libros con más de 600 páginas
+
+function filtrarPorPaginas(listaAComprobar, cantidadPaginas) {
+    return listaAComprobar.filter(libro => libro.paginas > cantidadPaginas).map(libro => libro.titulo);
+}
+/*
 libros.forEach((libro) => {
     libro.paginas > 600 ? console.log("libro: " + libro.titulo + " - paginas: " + libro.paginas) : "";
 });
+*/
 
 //mostrar libros publicados hace más de 20 años
 libros.forEach(libro => {
@@ -106,8 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `).join('')}
     </table>
   `;
-
-
 
     // Agregar evento al grupo de radio buttons
     document.querySelectorAll('input[name="genero"]').forEach(radio => {
