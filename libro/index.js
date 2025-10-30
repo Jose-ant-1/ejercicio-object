@@ -31,8 +31,8 @@ const libros = [
     },
     {
         "titulo": "El golfo de siempreVivos",
-        "genero": "Comedia",
-        "autor": ["Adan Fidgeral", "Carolina Diaz"],
+        "genero": "suspense",
+        "autor": ["Carolina Diaz"],
         "paginas": 900,
         "fechaPublicacion": "2019-10-28"
     }
@@ -59,15 +59,29 @@ function filtrarPorAnyo(listaAComprobar, anyo) {
         return antiguedad > anyo;
     });
 }
-const prueba = filtrarPorAnyo(libros,20);
-console.log(prueba)
+
+//mostrar libros con un solo autor
+function librosConUnAutor(listaAComprobar) {
+    return listaAComprobar.filter(libro => libro.autor.length === 1).map(libro => libro.titulo);
+}
+
+//mostrar autores y libros que ha escrito
+function contarLibrosPorAutor(listaLibros) {
+    const contador = {};
+
+    listaLibros.forEach(libro => {
+        libro.autor.forEach(nombre => {
+            contador[nombre] = (contador[nombre] || 0) + 1;
+        });
+    });
+
+    return Object.entries(contador).map(([autor, cantidad]) => ({
+        autor,
+        cantidadLibros: cantidad
+    }));
+}
 
 /*
-//libros con un unico autor
-libros.forEach(libro => {
-    libro.autor.length === 1 ? console.log("libro: " + libro.titulo + " - autor: " + libro.autor) : "";
-});
-
 //lista con nombres de autores y numero de libros que ha escrito
 let librosAutores = [];
 for (let i = 0; i < libros.length; i++) {
@@ -88,6 +102,7 @@ for (let i = 0; i < libros.length; i++) {
     }
 }
 //console.log(librosAutores)
+*/
 
 document.addEventListener("DOMContentLoaded", () => {
     // tomamos los géneros únicos
@@ -105,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <!-- Filtrar por género -->
         <b>Filtrar por género:</b><br>
+        <label><input type="radio" name="genero" value="todos">Todos</label>
         ${generos.map(genero => `
             <label><input type="radio" name="genero" value="${genero}"> ${genero}</label>
         `).join('')}
@@ -187,4 +203,3 @@ function actualizarTabla(lista) {
     `).join('')}
   `;
 }
-*/
