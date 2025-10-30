@@ -6,28 +6,37 @@ const libros = [
     "genero": "suspense",
     "autor": ["Dan Brown"],
     "paginas": 400,
-    "fechaPublicacion": 2003},
+    "fechaPublicacion": "2003-10-02"
+    },
     {
     "titulo": "Los Pilares de la Tierra",
     "genero": "misterio",
     "autor": ["Ken Follet"],
     "paginas": 800,
-    "fechaPublicacion": 1989
+    "fechaPublicacion": "1989-12-12"
     },
     {
     "titulo": "Un mundo sin fin",
     "genero": "historico",
     "autor": ["Ken Follet"],
     "paginas": 1200,
-    "fechaPublicacion": 2007
+    "fechaPublicacion": "2007-11-29"
     },
     {
     "titulo": "El cabo de NuncaMuertos",
     "genero": "Terror",
     "autor": ["Adan Fidgeral", "Carolina Diaz"],
     "paginas": 900,
-    "fechaPublicacion": 2017
-}];
+    "fechaPublicacion": "2017-04-02"
+    },
+    {
+        "titulo": "El golfo de siempreVivos",
+        "genero": "Comedia",
+        "autor": ["Adan Fidgeral", "Carolina Diaz"],
+        "paginas": 900,
+        "fechaPublicacion": "2019-10-28"
+    }
+];
 
 // mostrar libros con más de 600 páginas
 
@@ -41,10 +50,19 @@ libros.forEach((libro) => {
 */
 
 //mostrar libros publicados hace más de 20 años
-libros.forEach(libro => {
-    new Date().getFullYear() - libro.fechaPublicacion > 20 ? console.log(`Libro: ${libro.titulo} - año ${libro.fechaPublicacion}`) : "";
-})
+function filtrarPorAnyo(listaAComprobar, anyo) {
+    return listaAComprobar.filter(libro => {
+        const fechaLibro = new Date(libro.fechaPublicacion);
+        const anyoLibro = fechaLibro.getFullYear();
+        const anyoActual = new Date().getFullYear();
+        const antiguedad = anyoActual - anyoLibro;
+        return antiguedad > anyo;
+    });
+}
+const prueba = filtrarPorAnyo(libros,20);
+console.log(prueba)
 
+/*
 //libros con un unico autor
 libros.forEach(libro => {
     libro.autor.length === 1 ? console.log("libro: " + libro.titulo + " - autor: " + libro.autor) : "";
@@ -69,7 +87,7 @@ for (let i = 0; i < libros.length; i++) {
         }
     }
 }
-console.log(librosAutores)
+//console.log(librosAutores)
 
 document.addEventListener("DOMContentLoaded", () => {
     // tomamos los géneros únicos
@@ -169,3 +187,4 @@ function actualizarTabla(lista) {
     `).join('')}
   `;
 }
+*/
