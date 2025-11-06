@@ -2,7 +2,7 @@ import { pelis } from "./data/film.js";
 import { countries } from "./data/filtrospelis.js";
 import { genders } from "./data/filtrospelis.js";
 
-function filtrarPorNombre(listaAFiltrar, nombre) {
+function filtrarPorTitulo(listaAFiltrar, nombre) {
     return listaAFiltrar.filter((pelicula) => pelicula.Title.toLowerCase().includes(nombre.toLowerCase()));
 }
 
@@ -16,7 +16,6 @@ function filtrarPorActores(listaAFiltrar, actorABuscar) {
 
 function filtrarPorGeneros(listaAFiltrar, generosABuscar) {
     const generos = generosABuscar.toLowerCase().split(",").map(g => g.trim());
-    let i = 0;
     return listaAFiltrar.filter(pelicula => {
         const generoPelicula = pelicula.Genre.toLowerCase();
 
@@ -51,8 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // también mostramos todas las películas antes de empezar el filtrado
     mostrar.innerHTML += mostrarPeliculas(pelis)
 
-    const btnBuscar = document.getElementById("btnBuscar");
-    /*
     btnBuscar.addEventListener("click", buscarPelicula);
 
     function buscarPelicula() {
@@ -79,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById("btnBuscar").addEventListener("click", buscarPelicula);
     }
-*/
 });
 
 function buscarPelicula() {
@@ -97,13 +93,13 @@ function buscarPelicula() {
             generarFiltroPais() +
             generarCheckBoxGeneros() +
             generarBoton() +
-            mostrarTodasLasPeliculas(pelis);
+            mostrarPeliculas(pelis);
         return;
     }
 
     // Filtramos según los checkboxes seleccionados
     if (buscarPorTitulo) {
-        resultados.push(...filtrarPorNombre(pelis, texto));
+        resultados.push(...filtrarPorTitulo(pelis, texto));
     }
     if (buscarPorDirector) {
         resultados.push(...filtrarPorDirector(pelis, texto));
