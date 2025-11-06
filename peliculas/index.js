@@ -2,173 +2,130 @@ import { pelis } from "./data/film.js";
 import { countries } from "./data/filtrospelis.js";
 import { genders } from "./data/filtrospelis.js";
 
-function filtrarPorTitulo(listaAFiltrar, nombre) {
-    return listaAFiltrar.filter((pelicula) => pelicula.Title.toLowerCase().includes(nombre.toLowerCase()));
+// FILTROS
+
+function filtrarPorTitulo(lista, texto) {
+    return lista.filter(p => p.Title.toLowerCase().includes(texto.toLowerCase()));
 }
 
-function filtrarPorDirector(listaAFiltrar, director) {
-    return listaAFiltrar.filter((pelicula) => pelicula.Director.toLowerCase().includes(director.toLowerCase()));
+function filtrarPorDirector(lista, texto) {
+    return lista.filter(p => p.Director.toLowerCase().includes(texto.toLowerCase()));
 }
 
-function filtrarPorActores(listaAFiltrar, actorABuscar) {
-    return listaAFiltrar.filter((pelicula) => pelicula.Actors.toLowerCase().includes(actorABuscar.toLowerCase()));
+function filtrarPorActores(lista, texto) {
+    return lista.filter(p => p.Actors.toLowerCase().includes(texto.toLowerCase()));
 }
 
-function filtrarPorGeneros(listaAFiltrar, generosABuscar) {
-    const generos = generosABuscar.toLowerCase().split(",").map(g => g.trim());
-    return listaAFiltrar.filter(pelicula => {
-        const generoPelicula = pelicula.Genre.toLowerCase();
-
-        // Recorremos todos los géneros buscados
-        for (let i = 0; i < generos.length; i++) {
-            if (generoPelicula.includes(generos[i])) {
-                return true; // basta con que uno coincida → condición OR
-            }
-        }
-        return false; // si ninguno coincide
-    });
-
-}
-
-function filtrarPorPaises(listaAFiltrar, paisABuscar) {
-    return listaAFiltrar.filter((pelicula) => {
-        const paises = pelicula.Country.join(" ");
-        return paises.toLowerCase().includes(paisABuscar.toLowerCase());
-
+function filtrarPorPaises(lista, pais) {
+    if (pais === "todos") return lista;
+    return lista.filter(p => {
+        const paises = Array.isArray(p.Country) ? p.Country.join(" ") : p.Country;
+        return paises.toLowerCase().includes(pais.toLowerCase());
     });
 }
 
+// HACER HTML
 
-document.addEventListener("DOMContentLoaded", () => {
-    const mostrar = document.getElementById("mostrar");
-    // el filtro de pais
-    mostrar.innerHTML += generarFiltroPais();
-    // los checkBox de los géneros
-    mostrar.innerHTML += generarCheckBoxGeneros();
-    // y el botón de búsqueda
-    mostrar.innerHTML += generarBoton();
-    // también mostramos todas las películas antes de empezar el filtrado
-    mostrar.innerHTML += mostrarPeliculas(pelis)
-
-    btnBuscar.addEventListener("click", buscarPelicula);
-
-    function buscarPelicula() {
-        const texto = document.getElementById("buscar").value.trim().toLowerCase();
-
-        const buscarPorTitulo = document.getElementById("titulo").checked;
-        const buscarPorDirector = document.getElementById("director").checked;
-        const buscarPorActor = document.getElementById("actor").checked;
-
-        let resultado = [];
-
-        if (buscarPorTitulo) {
-            resultado.push(...filtrarPorTitulo(pelis,texto));
-        }
-        if (buscarPorDirector) {
-            resultado.push(...filtrarPorDirector(pelis,texto));
-        }
-        if (buscarPorActor) {
-            resultado.push(...filtrarPorActores(pelis,texto));
-        }
-        mostrar.innerHTML = generarFiltroPais() + generarCheckBoxGeneros() + generarBoton();
-
-        mostrar.innerHTML += mostrarPeliculas(resultado);
-
-        document.getElementById("btnBuscar").addEventListener("click", buscarPelicula);
-    }
-});
-
-function buscarPelicula() {
-    const texto = document.getElementById("buscar").value.trim().toLowerCase();
-
-    const buscarPorTitulo = document.getElementById("titulo").checked;
-    const buscarPorDirector = document.getElementById("director").checked;
-    const buscarPorActor = document.getElementById("actor").checked;
-
-    let resultados = [];
-
-    // Si no hay texto → mostrar todas
-    if (!texto) {
-        document.getElementById("mostrar").innerHTML =
-            generarFiltroPais() +
-            generarCheckBoxGeneros() +
-            generarBoton() +
-            mostrarPeliculas(pelis);
-        return;
-    }
-
-    // Filtramos según los checkboxes seleccionados
-    if (buscarPorTitulo) {
-        resultados.push(...filtrarPorTitulo(pelis, texto));
-    }
-    if (buscarPorDirector) {
-        resultados.push(...filtrarPorDirector(pelis, texto));
-    }
-    if (buscarPorActor) {
-        resultados.push(...filtrarPorActores(pelis, texto));
-    }
-
-    // Mostrar resultados
-    const mostrar = document.getElementById("mostrar");
-    mostrar.innerHTML =
-        generarFiltroPais() +
-        generarCheckBoxGeneros() +
-        generarBoton();
-
-    if (unicos.length > 0) {
-        mostrar.innerHTML += mostrarTodasLasPeliculas(unicos);
-    } else {
-        mostrar.innerHTML += `<p>No se encontraron películas.</p>`;
-    }
+function mostrarMenu() {
+    return generarFiltroPais() + generarCheckBoxGeneros() + generarBoton();
 }
-
 
 function generarFiltroPais() {
     return `
-            <div>
-            Pais de rodaje:
-            <br>
-            <select name="ciudad" id="ciudad">
-                <option value="todos">Todos los paises</option>
-                    ${countries.map(pais => {
-                        return `<option value="${pais}">${pais}</option>`;
-                        }).join("")
-                    }
-            </select>  
-        </div>
-    `;
-}
-
-
-
-function generarCheckBoxGeneros() {
-    return `        
         <div>
-            Géneros:<br>
-            <input type="checkbox" value="todosGeneros" id="todosGeneros" name="todosGeneros"><label for="todosGeneros">Todos</label>
-            ${genders.map(gender =>
-                `<input id="${gender}" name="${gender}" value="${gender}" type="checkbox">
-                 <label for="${gender}">${gender}</label>`).
-            join("")
-                }       
+            País de rodaje:
+            <br>
+            <select id="ciudad">
+                <option value="todos">Todos los países</option>
+                ${countries.map(pais => `<option value="${pais}">${pais}</option>`).join("")}
+            </select>
         </div>`;
 }
 
-function mostrarPeliculas(listaAMostrar) {
-    return listaAMostrar.map(pelicula => `
-          <div class="pelicula">
-            <p><strong>${pelicula.Title}</strong></p>
-            <p>${pelicula.Genre}</p>
-            <p>${pelicula.Director}</p>
-          </div>
-    `)
-        .join('');
+function generarCheckBoxGeneros() {
+    return `
+        <div>
+            Géneros:<br>
+            <input type="checkbox" id="todosGeneros"><label for="todosGeneros">Todos</label>
+            ${genders.map(gender => `
+                <input id="${gender}" name="generos" value="${gender}" type="checkbox">
+                <label for="${gender}">${gender}</label>`).join("")}
+        </div>`;
 }
 
 function generarBoton() {
-    return `<button type="button" onclick="buscarPelicula()">Buscar</button>`;
+    return `<button id="btnBuscar" type="button">Buscar</button>`;
 }
 
+function mostrarPeliculas(lista) {
+    if (lista.length === 0) return `<p>No se encontraron películas.</p>`;
+    return lista.map(p => `
+        <div class="pelicula">
+            <p><strong>${p.Title}</strong></p>
+            <p>${p.Genre}</p>
+            <p>${p.Director}</p>
+        </div>`).join("");
+}
 
+function cargarMenu(lista) {
 
+    function comprobarCheckBoxGeneros() {
+        const todos = document.getElementById("todosGeneros");
+        const generos = Array.from(document.querySelectorAll('input[name="generos"]'));
 
+        if (!todos || generos.length === 0) return;
+
+        todos.addEventListener('change', () => {
+            generos.forEach(genero => genero.checked = todos.checked);
+        });
+
+        generos.forEach(genero => {
+            genero.addEventListener("change", () => {
+                const todosMarcados = generos.every(x => x.checked);
+                todos.checked = todosMarcados;
+            });
+        })
+
+    }
+
+    const mostrar = document.getElementById("mostrar");
+    mostrar.innerHTML = mostrarMenu() + mostrarPeliculas(lista);
+
+    const btn = document.getElementById("btnBuscar");
+    btn.addEventListener("click", buscarPelicula);
+
+    comprobarCheckBoxGeneros();
+
+}
+
+// FILTRAR
+
+function buscarPelicula() {
+    const texto = document.getElementById("buscar").value.trim().toLowerCase();
+    const buscarPorTitulo = document.getElementById("titulo").checked;
+    const buscarPorDirector = document.getElementById("director").checked;
+    const buscarPorActor = document.getElementById("actor").checked;
+    const paisSeleccionado = document.getElementById("ciudad").value;
+
+    let resultados = [];
+
+    if (buscarPorTitulo) resultados.push(...filtrarPorTitulo(pelis, texto));
+    if (buscarPorDirector) resultados.push(...filtrarPorDirector(pelis, texto));
+    if (buscarPorActor) resultados.push(...filtrarPorActores(pelis, texto));
+
+    // Si no hay texto, mostrar todo
+    if (!texto) resultados = pelis;
+
+    // Quitar duplicados
+    const unicos = Array.from(new Set(resultados.map(p => p.Title)))
+        .map(t => resultados.find(p => p.Title === t));
+
+    // Filtro por país
+    const filtradosPorPais = filtrarPorPaises(unicos, paisSeleccionado);
+
+    cargarMenu(filtradosPorPais);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    cargarMenu(pelis);
+});
