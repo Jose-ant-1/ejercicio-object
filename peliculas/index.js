@@ -43,11 +43,12 @@ function generarFiltroPais() {
 }
 
 function generarCheckBoxGeneros() {
+    const generosOrdenados = [...genders].sort((a, b) => a.localeCompare(b));
     return `
         <div>
             Géneros:<br>
             <input type="checkbox" id="todosGeneros"><label for="todosGeneros">Todos</label>
-            ${genders.map(gender => `
+            ${generosOrdenados.map(gender => `
                 <input id="${gender}" name="generos" value="${gender}" type="checkbox">
                 <label for="${gender}">${gender}</label>`).join("")}
         </div>`;
@@ -102,10 +103,16 @@ function cargarMenu(lista) {
 
 function buscarPelicula() {
     const texto = document.getElementById("buscar").value.trim().toLowerCase();
-    const buscarPorTitulo = document.getElementById("titulo").checked;
-    const buscarPorDirector = document.getElementById("director").checked;
-    const buscarPorActor = document.getElementById("actor").checked;
+
+    const buscarPorTitulo = document.getElementById("titulo")?.checked;
+    const buscarPorDirector = document.getElementById("director")?.checked;
+    const buscarPorActor = document.getElementById("actor")?.checked;
     const paisSeleccionado = document.getElementById("ciudad").value;
+
+    const todosGeneros = document.getElementById("todosGeneros")?.checked;
+    // Sólo los checkboxes marcados
+    const generosSeleccionados = Array.from(document.querySelectorAll('input[name="generos"]:checked'))
+        .map(g => g.value);
 
     let resultados = [];
 
@@ -113,18 +120,29 @@ function buscarPelicula() {
     if (buscarPorDirector) resultados.push(...filtrarPorDirector(pelis, texto));
     if (buscarPorActor) resultados.push(...filtrarPorActores(pelis, texto));
 
-    // Si no hay texto, mostrar todo
-    if (!texto) resultados = pelis;
+    // Si no hay texto, mostramos todas las pelis (base completa)
+    if (!texto) resultados = [...pelis];
 
-    // Quitar duplicados
+    // Quitar duplicados por título
     const unicos = Array.from(new Set(resultados.map(p => p.Title)))
         .map(t => resultados.find(p => p.Title === t));
 
-    // Filtro por país
-    const filtradosPorPais = filtrarPorPaises(unicos, paisSeleccionado);
+    // Filtro por país (aplica sobre los únicos)
+    let filtrados = filtrarPorPaises(unicos, paisSeleccionado);
 
-    cargarMenu(filtradosPorPais);
+    // Filtro por géneros: si NO está "Todos" y hay géneros seleccionados
+    if (!todosGeneros && generosSeleccionados.length > 0) {
+        filtrados = filtrados.filter(p => {
+            const generosPeli = p.Genre.toLowerCase();
+            // coincide si la película contiene al menos uno de los géneros seleccionados
+            return generosSeleccionados.some(g => generosPeli.includes(g.toLowerCase()));
+        });
+    }
+
+    // Finalmente recargamos menú y resultados
+    cargarMenu(filtrados);
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     cargarMenu(pelis);
