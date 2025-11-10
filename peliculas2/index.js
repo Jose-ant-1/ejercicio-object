@@ -73,7 +73,7 @@ function mostrarMenu() {
     // Inicializamos la lógica de los checkbox de géneros
     function comprobarCheckBoxGeneros() {
         const todos = document.getElementById("todosGeneros");
-        const generos = Array.from(document.querySelectorAll('input[name="generos"]'));
+        const generos = [...(document.querySelectorAll('input[name="generos"]'))];
 
         todos.addEventListener("change", () => {
             generos.forEach(g => g.checked = todos.checked);

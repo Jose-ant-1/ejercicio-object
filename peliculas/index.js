@@ -61,6 +61,7 @@ function generarBoton() {
 function mostrarPeliculas(lista) {
     if (lista.length === 0) return `<p>No se encontraron películas.</p>`;
     return lista.map(p => `
+        <p>Se encontraron ${lista.length} películas</p>
         <div class="pelicula">
             <p><strong>${p.Title}</strong></p>
             <p>${p.Genre}</p>
