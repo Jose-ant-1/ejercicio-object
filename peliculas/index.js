@@ -73,7 +73,7 @@ function cargarMenu(lista) {
 
     function comprobarCheckBoxGeneros() {
         const todos = document.getElementById("todosGeneros");
-        const generos = Array.from(document.querySelectorAll('input[name="generos"]'));
+        const generos = [...(document.querySelectorAll('input[name="generos"]'))];
 
         if (!todos || generos.length === 0) return;
 
@@ -143,7 +143,6 @@ function buscarPelicula() {
     // Finalmente recargamos menú y resultados
     cargarMenu(filtrados);
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
     cargarMenu(pelis);
